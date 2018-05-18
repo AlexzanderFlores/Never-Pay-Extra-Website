@@ -6,6 +6,8 @@ nav {
 }
 
 nav #nav-name a {
+	grid-template-columns: 70px auto;
+	grid-column-gap: 20px;
 	font-size: 25px;
 	color: #FFF;
 }
