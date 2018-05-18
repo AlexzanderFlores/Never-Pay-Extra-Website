@@ -1,0 +1,25 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Never Pay Extra",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "express-sitemap": "^1.8.0",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "path": "^0.12.7",
+    "request": "^2.83.0",
+    "uuid": "^3.1.0"
+  }
+}

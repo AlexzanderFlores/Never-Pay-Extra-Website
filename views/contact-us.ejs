@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<% include _head %>
+	<title>Never Pay Extra</title>
+	<meta name='description' content='Never Pay Extra | The Price Comparison Tool | Price Check While you Shop'>
+	<meta name='keywords' content='never pay extra, price comparison tool, chrome extension price comparison, contact us, customer support, support, contact'>
+	<link rel='stylesheet' href='/css/contact-us.css'>
+</head>
+<body>
+	<% include _navigation %>
+	<div id='wrapper'>
+		<div id='content' class='center'>
+			<div id='inner_content' class='center'>
+				<form action='/contact-us' method='POST'>
+					<input id='email_input' class='input' name='email' type='text' placeholder='Your Email Address...' required autofocus>
+					<input id='subject_input' class='input' name='subject' type='text' placeholder='Subject...' required>
+					<textarea id='message_input' class='input' name='message' placeholder='Message...' required></textarea>
+					<span id='message_result'>
+						<% if(session.message_result) { %>
+							<%= session.message_result %>
+						<% } %>
+					</span>
+					<input id='submit_button' type='submit' value='Send Email'>
+				</form>
+			</div>
+		</div>
+	</div>
+	<% include _footer %>
+</body>
+</html>

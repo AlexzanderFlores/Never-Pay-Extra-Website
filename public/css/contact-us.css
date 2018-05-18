@@ -1,0 +1,84 @@
+#inner_content form {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(5, auto);
+	grid-template-areas:
+	'email_input subject_input'
+	'message_input message_input'
+	'sent_message sent_message'
+	'submit_button submit_button'
+	;
+	grid-gap: 20px;
+	width: 600px;
+}
+
+#inner_content form .input {
+	padding: 10px 15px;
+	border-radius: 3px;
+	border: 1px solid #CCC;
+	font-size: 18px;
+	resize: none;
+}
+
+#inner_content form input {
+	height: 50px;
+}
+
+#inner_content #email_input {
+	grid-area: email_input;
+}
+
+#inner_content #subject_input {
+	grid-area: subject_input;
+}
+
+#inner_content #message_input {
+	grid-area: message_input;
+	height: 300px;
+}
+
+#inner_content #message_result {
+	display: grid;
+	justify-self: center;
+	grid-area: sent_message;
+	text-align: center;
+	font-size: 18px;
+	color: #555;
+}
+
+#inner_content #submit_button {
+	display: grid;
+	justify-self: center;
+	grid-area: submit_button;
+	width: 350px;
+	font-size: 20px;
+	background-color: #FA5C76;
+	color: #FFF;
+	border-radius: 5px;
+	border: 1px solid #CCC;
+}
+
+#inner_content #submit_button:hover {
+	cursor: pointer;
+}
+
+@media screen and (max-width: 650px) {
+	#inner_content form {
+		grid-template-columns: none;
+		grid-template-rows: repeat(5, auto);
+		grid-template-areas:
+		'email_input'
+		'subject_input'
+		'message_input'
+		'sent_message'
+		'submit_button'
+		;
+		width: 95%;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#inner_content #submit_button {
+		width: 95%;
+	}
+}

@@ -1,0 +1,81 @@
+footer {
+	align-items: center;
+	background: #EEE;
+}
+
+#footer {
+	grid-template-rows: 160px 30px;
+	grid-template-columns: repeat(3, auto);
+	grid-template-areas: "company_menu apps_menu social_container" "legal legal legal";
+	grid-row-gap: 10px;
+	width: 1000px;
+}
+
+#footer > * {
+	display: grid;
+	grid-template-rows: 25px auto;
+	grid-row-gap: 10px;
+	justify-items: center;
+	padding: 5px 20px;
+}
+
+#footer ul {
+	align-self: start;
+	grid-gap: 10px;
+}
+
+#footer a:link, #footer a:visited, #footer a:hover, #footer a:active {
+	color: #2B2B2F;
+}
+
+#footer #company_menu {
+	grid-area: company_menu;
+}
+
+#footer #apps_menu {
+	grid-area: apps_menu;
+}
+
+#footer #social_container {
+	grid-area: social_container;
+}
+
+#footer #social_container #social_list i {
+	background: -webkit-linear-gradient(#FD5785, #F86668);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+#footer #legal {
+	grid-area: legal;
+	height: 100%;
+}
+
+#footer #apps_menu ul {
+	grid-template-columns: repeat(2, auto);
+}
+
+@media screen and (min-width: 1151px) {
+	#footer > *:not(#legal) {
+		height: 157px;
+	}
+}
+
+@media screen and (max-width: 1150px) {
+	footer {
+		height: 430px;
+	}
+
+	#footer {
+		grid-template-rows: repeat(4, auto);
+		grid-template-columns: none;
+		grid-template-areas:
+		"company_menu"
+		"apps_menu"
+		"social_container"
+		"legal"
+		;
+		width: 80%;
+		grid-row-gap: 10px;
+	}
+}

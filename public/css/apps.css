@@ -1,0 +1,10 @@
+/* #app_container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 15px;
+}
+
+#app_container img {
+	height: 70px;
+	width: 70px;
+} */
