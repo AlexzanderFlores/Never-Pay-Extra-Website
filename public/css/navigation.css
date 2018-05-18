@@ -23,7 +23,7 @@ nav #nav-search i {
 	position: absolute;
 	top: 3px;
 	right: 10px;
-	color: #2B2B2B;
+	color: #333;
 	font-size: 25px;
 	cursor: pointer;
 }
@@ -40,74 +40,19 @@ nav #nav-search input {
 	padding: 0 10px;
 }
 
-#navigation {
-	display: grid;
-	grid-template-columns: auto auto auto;
-	height: 100%;
-	width: 1000px;
+@media screen and (max-width: 1150px) {
+	nav #nav-name strong {
+		display: none;
+	}
 }
 
-#navigation #logo_container {
-	grid-template-rows: auto auto;
-	grid-template-columns: auto auto;
-	grid-template-areas: 'logo company_name' 'logo slogan';
-	grid-row-gap: 5px;
-	grid-column-gap: 20px;
-	justify-self: left;
-	height: 100%;
-}
-
-#navigation #logo_container > * {
-	height: 100%;
-	width: 100%;
-}
-
-#navigation #logo_container span {
-	display: grid;
-	justify-items: center;
-}
-
-#navigation #logo_container img {
-	grid-area: logo;
-}
-
-#navigation #logo_container #company_name {
-	display: grid;
-	grid-area: company_name;
-	align-items: end;
-	font-size: 22px;
-}
-
-#navigation #logo_container #slogan {
-	grid-area: slogan;
-	font-size: 14px;
-}
-
-#navigation #social_list {
-	justify-self: right;
-}
-
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 850px) {
 	nav {
+		grid-template-columns: 100px auto;
 		padding: 0 20px;
 	}
 
-	#navigation {
-		width: 100%;
-	}
-}
-
-@media screen and (max-width: 500px) {
-	body {
-		grid-template-rows: 130px 1fr auto !important;
-	}
-
-	#navigation {
-		grid-template-columns: none;
-		grid-template-rows: 80px 50px;
-	}
-
-	#navigation #logo_container, #navigation #social_list {
-		justify-self: center;
+	nav #social_list {
+		display: none;
 	}
 }
