@@ -4,24 +4,27 @@ $(document).ready(function() {
 	const cp = url.searchParams.get('cp');
 
 	if(query) {
-		// const url = `https://api.neverpayextra.com/v1/search?query=${query.replace(/ /g, '+')}`;
+		const url = `https://api.neverpayextra.com/v1/search?query=${query.replace(/ /g, '+')}`;
 
-		const product = {
-			comparePrice: 0,
-			foundProducts : true,
-			platform: "ebay",
-			platformDisplay: "eBay",
-			price: 7.99,
-			productImage: "http://thumbs1.ebaystatic.com/m/mBJHg-8KNZeitax9ta6bcgg/140.jpg",
-			title: "Deluxe Travel Edition Scratch Off World Map Poster Personalized Journal Log ",
-			url: "http://www.ebay.com/itm/Deluxe-Travel-Edition-Scratch-Off-World-Map-Poster-Personalized-Journal-Log-/112733738664",
-			rating: 4.5,
-			reviews: 43
-		};
+		// const product = {
+		// 	comparePrice: 0,
+		// 	foundProducts : true,
+		// 	platform: "ebay",
+		// 	platformDisplay: "eBay",
+		// 	price: 7.99,
+		// 	productImage: "http://thumbs1.ebaystatic.com/m/mBJHg-8KNZeitax9ta6bcgg/140.jpg",
+		// 	title: "Deluxe Travel Edition Scratch Off World Map Poster Personalized Journal Log ",
+		// 	url: "http://www.ebay.com/itm/Deluxe-Travel-Edition-Scratch-Off-World-Map-Poster-Personalized-Journal-Log-/112733738664",
+		// 	rating: 4.5,
+		// 	reviews: 43
+		// };
 
-		// $.get(url).done(function(data) {
-		// 	console.log(data);
-			const products = [product];
+		$.get(url).done(function(data) {
+			console.log(data);
+			const products = [data];
+			// for(let a = 0; a < 5; ++a) {
+			// 	products.push(product);
+			// }
 
 			let html = '';
 			for(let product of products) {
@@ -54,7 +57,7 @@ $(document).ready(function() {
 							html += `
 								<div class='product-rating'>
 									<span>${product.rating} <span>&#9733;</span></span>
-									${product.reviews} Reviews
+									<span>${product.reviews} Reviews</span>
 								</div>
 							`;
 						}
@@ -66,11 +69,11 @@ $(document).ready(function() {
 			}
 
 			$('#inner_content').html(html);
-		// }).fail(function(xhr, text, error) {
-		// 	console.log('Status: ' + xhr.status);
-		// 	console.log('Text: ' + text);
-		// 	console.log('Error: ' + error);
-		// });
+		}).fail(function(xhr, text, error) {
+			console.log('Status: ' + xhr.status);
+			console.log('Text: ' + text);
+			console.log('Error: ' + error);
+		});
 	}
 
 	$('#query').on('change paste keyup', function() {
