@@ -1,7 +1,6 @@
 const fs = require('fs');
 const express = require('express');
 const sitemap = require('express-sitemap');
-const request = require('request');
 const router = express.Router();
 
 const mapData = {
