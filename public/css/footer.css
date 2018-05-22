@@ -5,8 +5,8 @@ footer {
 
 #footer {
 	grid-template-rows: 160px 30px;
-	grid-template-columns: repeat(3, auto);
-	grid-template-areas: "company_menu apps_menu social_container" "legal legal legal";
+	grid-template-columns: repeat(2, auto);
+	grid-template-areas: 'company_menu social_container' 'legal legal';
 	grid-row-gap: 10px;
 	width: 1000px;
 }
