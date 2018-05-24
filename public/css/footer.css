@@ -6,7 +6,7 @@ footer {
 #footer {
 	grid-template-rows: 160px 30px;
 	grid-template-columns: repeat(2, auto);
-	grid-template-areas: 'company_menu social_container' 'legal legal';
+	grid-template-areas: 'company-menu social-container' 'legal legal';
 	grid-row-gap: 10px;
 	width: 1000px;
 }
@@ -28,19 +28,15 @@ footer {
 	color: #2B2B2F;
 }
 
-#footer #company_menu {
-	grid-area: company_menu;
+#footer #company-menu {
+	grid-area: company-menu;
 }
 
-#footer #apps_menu {
-	grid-area: apps_menu;
+#footer #social-container {
+	grid-area: social-container;
 }
 
-#footer #social_container {
-	grid-area: social_container;
-}
-
-#footer #social_container #social_list i {
+#footer #social-container #social_list i {
 	background: -webkit-linear-gradient(#FD5785, #F86668);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -49,10 +45,6 @@ footer {
 #footer #legal {
 	grid-area: legal;
 	height: 100%;
-}
-
-#footer #apps_menu ul {
-	grid-template-columns: repeat(2, auto);
 }
 
 @media screen and (min-width: 1151px) {
@@ -70,11 +62,9 @@ footer {
 		grid-template-rows: repeat(4, auto);
 		grid-template-columns: none;
 		grid-template-areas:
-		"company_menu"
-		"apps_menu"
-		"social_container"
-		"legal"
-		;
+		'company-menu'
+		'social-container'
+		'legal';
 		width: 80%;
 		grid-row-gap: 10px;
 	}

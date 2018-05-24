@@ -54,7 +54,6 @@ router.get('/robots.txt', (req, res) => {
 	res.send('User-agent: *\nDisallow:');
 });
 router.get('/sitemap.xml', (req, res) => res.sendFile('/var/app/current/sitemap.xml'));
-router.get('/favicon.ico', (req, res) => res.send('https://s3.amazonaws.com/com.neverpayextra/favicon.png'));
 
 router.get('*', (req, res) => res.render('404'));
 
