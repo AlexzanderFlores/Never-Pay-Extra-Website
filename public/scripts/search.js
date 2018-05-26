@@ -63,19 +63,41 @@ $(document).ready(function() {
 							savings = 0;
 						}
 
-						if(product.image && product.image.indexOf('http://') === 0) {
-							product.image = product.image.replace('http://', 'https://');
-						}
-
 						if(product.url && product.url.indexOf('http://') === 0) {
 							product.url = product.url.replace('http://', 'https://');
 						}
 
+						product.images = [
+							product.image,
+							product.image,
+							product.image,
+							product.image
+						];
+
+						for(let a = 0; a < product.images.length; ++a) {
+							const image = product.images[a];
+							if(image && image.indexOf('http://') === 0) {
+								product.images[a] = image.replace('http://', 'https://');
+							}
+						}
+
 						let html = `
 							<div class='product'>
-								<a href='${product.url}' target='_blank' class='product-image center'>
-									<img src='${product.image}'>
-								</a>
+								<div class='product-image center'>
+									<div class='main-image center'>
+										<img src='${product.images[0]}'>
+									</div>
+									<div class='mini-image-container center'>`;
+									for(let a = 1; a < product.images.length; ++a) {
+										html += `
+											<div class='mini-image center'>
+												<img src=${product.images[a]}>
+											</div>
+										`;
+									}
+								html += `
+									</div>
+								</div>
 								<a href='${product.url}' target='_blank' class='product-title'>
 									${product.title}
 								</a>

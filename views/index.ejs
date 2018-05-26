@@ -29,15 +29,11 @@
 		$(document).ready(() => {
 			setTimeout(() => {
 				if($('#wrapper').attr('extension-enabled') === 'false') {
-					let app;
 			    if(navigator.userAgent.indexOf('Chrome') >= 0) {
-						app = $('#browser_plugin #chrome-app');
+						$('#browser_plugin #chrome-app').css('animation', 'app-pulse-chrome 1s linear infinite');
 			    } else if(navigator.userAgent.indexOf('Firefox') >= 0) {
-						app = $('#browser_plugin #fire-fox-app');
+						$('#browser_plugin #fire-fox-app').css('animation', 'app-pulse-fire-fox 1s linear infinite');
 			    }
-					if(app) {
-						app.css('animation', 'app-pulse 1s linear infinite');
-					}
 				}
 			}, 1000);
 		});

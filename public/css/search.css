@@ -7,14 +7,15 @@
   display: grid;
   align-items: center;
   grid-template-columns: 212px auto 150px;
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-rows: repeat(7, 1fr);
   grid-template-areas:
-	'product-image product-title product-rating'
+	'product-image product-title product-title'
   'product-image product-platform .'
   'product-image . .'
+  'product-image . .'
+  'product-image product-rating product-link'
   'product-image product-price product-link'
-  'product-image product-savings product-link'
-  'product-image . .';
+	'product-image . .';
   height: 175px;
   width: 100%;
 	margin-bottom: 15px;
@@ -26,14 +27,39 @@
 }
 
 .product-image {
+	display: grid;
+	grid-template-rows: 125px 50px;
   grid-area: product-image;
-  height: 157px;
+	height: 100%;
   width: 212px;
 }
 
-.product-image img {
+.product-image .main-image {
+	height: 100%;
+	width: 100%;
+	padding: 5px 0;
+}
+
+.product-image .main-image img {
   max-height: 100%;
-  max-width: 100%;
+	max-width: 100%;
+}
+
+.product-image .mini-image-container {
+	grid-template-columns: repeat(auto-fit, 33%);
+	height: 100%;
+	width: 100%;
+}
+
+.product-image .mini-image {
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+}
+
+.product-image .mini-image img {
+	max-height: 100%;
+	max-width: 100%;
 }
 
 .product-title {
@@ -67,16 +93,26 @@
 
 .product-rating {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+	justify-items: start;
+  grid-template-columns: 60px 150px;
   grid-area: product-rating;
-  justify-self: end;
-  width: 125px;
+}
+
+.product-rating > span {
+	display: grid;
+	align-items: center;
+}
+
+.product-rating > span:first-child {
+	grid-template-columns: auto auto;
 }
 
 .product-rating > span > span {
   color: #FC4D76;
   font-size: 24px;
   font-weight: 900;
+	margin-top: -7px;
+	margin-left: 2px;
 }
 
 .product-link {
@@ -98,8 +134,8 @@
 	  'product-image . .'
 		'product-image product-title product-title'
 	  'product-image product-platform .'
-	  'product-image product-price product-rating'
-	  'product-image product-savings product-link'
+	  'product-image product-rating .'
+	  'product-image product-price product-link'
 	  'product-image . .';
 	}
 
@@ -138,7 +174,7 @@
 	}
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 575px) {
 	.product {
 		grid-template-rows: auto auto;
 		grid-template-columns: 1fr 1fr;
@@ -146,8 +182,8 @@
 		'product-image product-image'
 		'product-title product-title'
 		'product-platform .'
-		'product-price product-rating'
-		'product-savings product-link';
+		'product-rating .'
+		'product-price product-link';
 		margin-bottom: 0;
 		padding: 20px 0;
 		height: 340px;
@@ -160,5 +196,10 @@
 
 	.product-title {
 		text-align: center;
+		padding: 0 5px;
+	}
+
+	.product-rating {
+		grid-template-columns: 40px 85px;
 	}
 }
