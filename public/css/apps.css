@@ -4,3 +4,7 @@
 	grid-gap: 15px;
 	height: 70px;
 }
+
+#app_container a {
+	border-radius: 50%;
+}

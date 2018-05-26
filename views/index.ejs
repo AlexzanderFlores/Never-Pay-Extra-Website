@@ -8,7 +8,7 @@
 </head>
 <body>
 	<% include _navigation %>
-	<div id='wrapper'>
+	<div id='wrapper' extension-enabled='false'>
 		<div id='content' class='center'>
 			<div id='inner_content' class='center'>
 				<div id='sales_video' class='center'>
@@ -26,6 +26,21 @@
 	<% include _footer %>
 	<script>
 		$('footer #apps-container').css('display', 'none');
+		$(document).ready(() => {
+			setTimeout(() => {
+				if($('#wrapper').attr('extension-enabled') === 'false') {
+					let app;
+			    if(navigator.userAgent.indexOf('Chrome') >= 0) {
+						app = $('#browser_plugin #chrome-app');
+			    } else if(navigator.userAgent.indexOf('Firefox') >= 0) {
+						app = $('#browser_plugin #fire-fox-app');
+			    }
+					if(app) {
+						app.css('animation', 'app-pulse 1s linear infinite');
+					}
+				}
+			}, 1000);
+		});
 	</script>
 </body>
 </html>
