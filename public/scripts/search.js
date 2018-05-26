@@ -1,49 +1,14 @@
 const foundProducts = [];
-let container;
 const websites = [
 	'amazon',
 	'ebay',
-	'bestbuy'
+	'bestbuy',
+	'walmart'
 ];
+let container;
 
 function isStringUPC(query) {
 	return query && query.length === 12 && typeof(query) != 'boolean' && !isNaN(query);
-}
-
-function getCommonWords() {
-	const words = {};
-
-	for(let product of foundProducts) {
-		let title = product.title.toLowerCase();
-		title = title.split(' ').filter(function(item, i, allItems) {
-		    return i == allItems.indexOf(item);
-		}).join(' ');
-
-		const split = title.split(' ');
-		for(let word of split) {
-			if(npeStopWords.indexOf(word) === -1) {
-				if(words[word]) {
-					++words[word];
-				} else {
-					words[word] = 1;
-				}
-			}
-		}
-	}
-
-	title = '';
-
-	Object.keys(words).forEach(function(key, index) {
-		if(words[key] === 1) {
-			delete words[key];
-		} else {
-			title += key + ' ';
-		}
-	});
-
-	title = title.substring(0, title.length - 1);
-
-	return title;
 }
 
 function isRelated(product, query) {
@@ -86,6 +51,7 @@ $(document).ready(function() {
 
 			$.get(url).done(function(data) {
 				const products = data;
+
 				if(products.errorMessage === undefined && products.length) {
 					for(let product of products) {
 						if(!isUPC && !isRelated(product, query)) {
