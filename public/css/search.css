@@ -17,7 +17,7 @@
   'product-image . .';
   height: 175px;
   width: 100%;
-	margin-bottom: 50px;
+	margin-bottom: 15px;
   border-bottom: 1px solid #B7B7B7;
 }
 
@@ -40,6 +40,7 @@
   grid-area: product-title;
   font-size: 20px;
   font-weight: bold;
+  color: #1A1A1A;
 }
 
 .product-platform {

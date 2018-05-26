@@ -5,8 +5,8 @@ footer {
 
 #footer {
 	grid-template-rows: 160px 30px;
-	grid-template-columns: repeat(2, auto);
-	grid-template-areas: 'company-menu social-container' 'legal legal';
+	grid-template-columns: repeat(3, auto);
+	grid-template-areas: 'company-menu apps-container social-container' 'legal legal legal';
 	grid-row-gap: 10px;
 	width: 1000px;
 }
@@ -30,6 +30,10 @@ footer {
 
 #footer #company-menu {
 	grid-area: company-menu;
+}
+
+#footer #apps-container {
+	grid-area: apps-container;
 }
 
 #footer #social-container {
@@ -63,6 +67,7 @@ footer {
 		grid-template-columns: none;
 		grid-template-areas:
 		'company-menu'
+		'apps-container'
 		'social-container'
 		'legal';
 		width: 80%;
