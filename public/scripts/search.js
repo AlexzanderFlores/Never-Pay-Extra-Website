@@ -56,11 +56,6 @@ $(document).ready(() => {
 							continue;
 						}
 
-						let savings = product.comparePrice - product.price;
-						if(savings < 0) {
-							savings = 0;
-						}
-
 						if(product.url && product.url.indexOf('http://') === 0) {
 							product.url = product.url.replace('http://', 'https://');
 						}
@@ -103,11 +98,6 @@ $(document).ready(() => {
 								<div class='product-price'>
 									<strong>$${(product.price).toFixed(2)}</strong>
 								</div>`;
-								if(savings > 0) {
-									html += `<a href='${product.url}' target='_blank' class='product-savings center'>
-										Save $${(savings).toFixed(2)}
-									</a>`;
-								}
 								if(product.rating && product.reviews) {
 									html += `
 										<div class='product-rating'>
@@ -119,6 +109,23 @@ $(document).ready(() => {
 								html += `<a href='${product.url}' target='_blank' class='product-link center'>
 									VIEW PRODUCT
 								</a>
+								<div class='product-icons'>`;
+									if(product.returnsAccepted) {
+										html += `<div class='product-icon returns-accepted' title='Returns Accepted'>&#x1f4e6</div>`;
+									}
+									if(product.fewDayShipping) {
+										html += `<div class='product-icon few-day-shipping' title='2-3 Day Shipping'>&#x1F69A</div>`;
+									}
+									if(product.inStore) {
+										html += `<div class='product-icon in-store' title='Available in Store'>&#x1F3EC</div>`;
+									}
+									if(product.online) {
+										html += `<div class='product-icon online' title='Available Online'>&#x1F4BB</div>`;
+									}
+									if(product.processing) {
+										html += `<div class='product-icon processing' title='${products.processing}'>&#x23F3</div>`;
+									}
+								html += `</div>
 							</div>
 						`;
 
