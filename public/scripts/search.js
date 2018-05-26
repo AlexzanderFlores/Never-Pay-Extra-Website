@@ -7,11 +7,11 @@ const websites = [
 ];
 let container;
 
-function isStringUPC(query) {
+const isStringUPC = query => {
 	return query && query.length === 12 && typeof(query) != 'boolean' && !isNaN(query);
-}
+};
 
-function isRelated(product, query) {
+const isRelated = (product, query) => {
 	let count = 0;
 	const queryLength = query.split(' ').length;
 
@@ -22,21 +22,19 @@ function isRelated(product, query) {
 	}
 
 	return false;
-}
+};
 
-function displayProducts() {
-	foundProducts.sort(function(a, b) {
-		return a.price > b.price ? 1 : a.price < b.price ? -1 : 0;
-	});
+const displayProducts = () => {
+	foundProducts.sort((a, b) => a.price > b.price ? 1 : a.price < b.price ? -1 : 0);
 
 	let html = '';
 	for(let product of foundProducts) {
 		html += product.html;
 	}
 	container.html(html);
-}
+};
 
-$(document).ready(function() {
+$(document).ready(() => {
 	const url = new URL(window.location.href);
 	const query = url.searchParams.get('q');
 
@@ -49,10 +47,10 @@ $(document).ready(function() {
 		for(let site of websites) {
 			const url = `https://api.neverpayextra.com/v1/search/${site}?query=${query.replace(/ /g, '+')}`;
 
-			$.get(url).done(function(data) {
+			$.get(url).done(data => {
 				const products = data;
 
-				if(products.errorMessage === undefined && products.length) {
+				if(products && products.errorMessage === undefined && products.length) {
 					for(let product of products) {
 						if(!isUPC && !isRelated(product, query)) {
 							continue;
@@ -67,13 +65,6 @@ $(document).ready(function() {
 							product.url = product.url.replace('http://', 'https://');
 						}
 
-						product.images = [
-							product.image,
-							product.image,
-							product.image,
-							product.image
-						];
-
 						for(let a = 0; a < product.images.length; ++a) {
 							const image = product.images[a];
 							if(image && image.indexOf('http://') === 0) {
@@ -83,14 +74,19 @@ $(document).ready(function() {
 
 						let html = `
 							<div class='product'>
-								<div class='product-image center'>
-									<div class='main-image center'>
+								<div class='product-image center' original-image='${product.images[0]}'>
+									<a href='${product.url}' target='_blank' class='main-image center'>
 										<img src='${product.images[0]}'>
-									</div>
+									</a>
 									<div class='mini-image-container center'>`;
-									for(let a = 1; a < product.images.length; ++a) {
+									for(let a = 0; a < product.images.length; ++a) {
+										let selected = '';
+										if(a === 0) {
+											selected = ' selected';
+										}
+
 										html += `
-											<div class='mini-image center'>
+											<div class='mini-image center${selected}'>
 												<img src=${product.images[a]}>
 											</div>
 										`;
@@ -131,7 +127,7 @@ $(document).ready(function() {
 						displayProducts();
 					}
 				}
-			}).fail(function(xhr, text, error) {
+			}).fail((xhr, text, error) => {
 				console.log('Status: ' + xhr.status);
 				console.log('Text: ' + text);
 				console.log('Error: ' + error);
@@ -140,7 +136,29 @@ $(document).ready(function() {
 		}
 	}
 
-	$('#query').on('change paste keyup', function() {
+	$(document).on('mouseover', '.mini-image img', event => {
+		const target = $(event.target);
+		const container = target.closest('.product-image');
+		const image = container.find('.main-image img');
+		$(image).attr('src', target.attr('src'));
+	});
+
+	$(document).on('mouseleave', '.mini-image:not(.selected) img', event => {
+		const target = $(event.target);
+		const container = target.closest('.product-image');
+		const image = container.find('.main-image img');
+		$(image).attr('src', container.attr('original-image'));
+	});
+
+	$(document).on('click', '.mini-image img', event => {
+		const target = $(event.target);
+		const container = target.closest('.product-image');
+		container.find('.mini-image').removeClass('selected');
+		target.closest('.mini-image').addClass('selected');
+		container.attr('original-image', target.attr('src'));
+	});
+
+	$('#query').on('change paste keyup', () => {
 		$('nav form').attr('action', '/search?q=' + $(this).val());
 	});
 });

@@ -46,15 +46,21 @@
 }
 
 .product-image .mini-image-container {
-	grid-template-columns: repeat(auto-fit, 33%);
+	grid-template-columns: repeat(auto-fit, 25%);
 	height: 100%;
 	width: 100%;
+  padding: 0 15px;
 }
 
 .product-image .mini-image {
 	display: inline-block;
 	height: 40px;
 	width: 40px;
+  border: 1px solid #FFF;
+}
+
+.product-image .mini-image:hover, .product-image .mini-image.selected {
+  border: 1px solid gray;
 }
 
 .product-image .mini-image img {
