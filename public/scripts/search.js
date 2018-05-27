@@ -14,9 +14,13 @@ const isStringUPC = query => {
 const isRelated = (product, query) => {
 	let count = 0;
 	const queryLength = query.split(' ').length;
+	if(queryLength === 1) {
+		return true;
+	}
+	const title = product.title.toLowerCase().replace(/\s+[^ A-Za-z0-9]/g, '');
 
-	for(let word of product.title.toLowerCase().split(' ')) {
-		if(query.toLowerCase().indexOf(word) >= 0 && (++count >= 3 || count >= queryLength)) {
+	for(let word of title.split(' ')) {
+		if(query.toLowerCase().indexOf(word) >= 0 && ++count >= 2) {
 			return true;
 		}
 	}
@@ -67,28 +71,59 @@ $(document).ready(() => {
 							}
 						}
 
+						const imageCount = product.images.length;
+						const multiImage = imageCount > 1 ? ' multiple-images' : '';
+
+						let iconCount = 0;
+						let iconHtml = '';
+						if(product.returnsAccepted) {
+							iconHtml += `<div class='product-icon returns-accepted' title='Returns Accepted'>&#x1f4e6</div>`;
+							++iconCount;
+						}
+						if(product.fewDayShipping) {
+							iconHtml += `<div class='product-icon few-day-shipping' title='2-3 Day Shipping'>&#x1F69A</div>`;
+							++iconCount;
+						}
+						if(product.inStore) {
+							iconHtml += `<div class='product-icon in-store' title='Available in Store'>&#x1F3EC</div>`;
+							++iconCount;
+						}
+						if(product.online) {
+							iconHtml += `<div class='product-icon online' title='Available Online'>&#x1F4BB</div>`;
+							++iconCount;
+						}
+						if(product.processing) {
+							iconHtml += `<div class='product-icon processing' title='${product.processing}'>&#x23F3</div>`;
+							++iconCount;
+						}
+						if(product.gift) {
+							iconHtml += `<div class='product-icon gift' title='Gift Wrapping Available'>&#x1F381</div>`;
+							++iconCount;
+						}
+
 						let html = `
 							<div class='product'>
-								<div class='product-image center' original-image='${product.images[0]}'>
+								<div class='product-image center${multiImage}' original-image='${product.images[0]}'>
 									<a href='${product.url}' target='_blank' class='main-image center'>
 										<img src='${product.images[0]}'>
-									</a>
-									<div class='mini-image-container center'>`;
-									for(let a = 0; a < product.images.length; ++a) {
-										let selected = '';
-										if(a === 0) {
-											selected = ' selected';
-										}
+									</a>`;
+									if(imageCount > 1) {
+										html += `<div class='mini-image-container center'>`;
+										for(let a = 0; a < product.images.length; ++a) {
+											let selected = '';
+											if(a === 0) {
+												selected = ' selected';
+											}
 
-										html += `
-											<div class='mini-image center${selected}'>
-												<img src=${product.images[a]}>
-											</div>
-										`;
+											html += `
+												<div class='mini-image center${selected}'>
+													<img src=${product.images[a]}>
+												</div>
+											`;
+										}
+										html += '</div>';
 									}
-								html += `
-									</div>
-								</div>
+								html += `</div>
 								<a href='${product.url}' target='_blank' class='product-title'>
 									${product.title}
 								</a>
@@ -101,31 +136,15 @@ $(document).ready(() => {
 								if(product.rating && product.reviews) {
 									html += `
 										<div class='product-rating'>
-											<span>${product.rating} <span>&#9733;</span></span>
-											<span>${product.reviews} Reviews</span>
+											<span>${Math.round(product.rating * 10) / 10} <span>&#9733;</span></span>
+											<span>${String(product.reviews).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} Reviews</span>
 										</div>
 									`;
 								}
 								html += `<a href='${product.url}' target='_blank' class='product-link center'>
 									VIEW PRODUCT
 								</a>
-								<div class='product-icons'>`;
-									if(product.returnsAccepted) {
-										html += `<div class='product-icon returns-accepted' title='Returns Accepted'>&#x1f4e6</div>`;
-									}
-									if(product.fewDayShipping) {
-										html += `<div class='product-icon few-day-shipping' title='2-3 Day Shipping'>&#x1F69A</div>`;
-									}
-									if(product.inStore) {
-										html += `<div class='product-icon in-store' title='Available in Store'>&#x1F3EC</div>`;
-									}
-									if(product.online) {
-										html += `<div class='product-icon online' title='Available Online'>&#x1F4BB</div>`;
-									}
-									if(product.processing) {
-										html += `<div class='product-icon processing' title='${products.processing}'>&#x23F3</div>`;
-									}
-								html += `</div>
+								<div class='product-icons' style='width: ${iconCount * 30 + 5}px'>${iconHtml}</div>
 							</div>
 						`;
 

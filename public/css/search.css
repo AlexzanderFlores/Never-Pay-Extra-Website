@@ -27,11 +27,14 @@
 }
 
 .product-image {
-	display: grid;
-	grid-template-rows: 125px 50px;
   grid-area: product-image;
 	height: 100%;
   width: 212px;
+}
+
+.product-image.multiple-images {
+  display: grid;
+	grid-template-rows: 125px 50px;
 }
 
 .product-image .main-image {
@@ -42,10 +45,11 @@
 
 .product-image .main-image img {
   max-height: 100%;
-	max-width: 100%;
+	max-width: 200px;
 }
 
 .product-image .mini-image-container {
+  display: grid;
 	grid-template-columns: repeat(auto-fit, 25%);
 	height: 100%;
 	width: 100%;
@@ -125,9 +129,17 @@
 
 .product-icons {
 	display: grid;
+  justify-self: end;
 	grid-template-columns: repeat(auto-fill, 30px);
 	grid-area: product-icons;
 	margin-bottom: 10px;
+}
+
+.product-icons > * {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 30px;
 }
 
 @media screen and (max-width: 850px) {
@@ -137,14 +149,23 @@
 	  'product-image . .'
 		'product-image product-title product-title'
 	  'product-image product-platform .'
-	  'product-image product-rating .'
-	  'product-image product-price product-link'
+    'product-image . .'
+	  'product-image product-rating product-link'
+	  'product-image product-price product-icons'
 	  'product-image . .';
 	}
 
 	.product-image {
 		width: 175px;
 	}
+
+  .product-image .main-image {
+    padding: 0 5px;
+  }
+
+  .product-image .main-image img {
+    width: 100%;
+  }
 
 	.product-title {
 		font-size: 12px;
@@ -174,30 +195,45 @@
 
 @media screen and (max-width: 575px) {
 	.product {
-		grid-template-rows: auto auto;
+		grid-template-rows: repeat(5, auto);
 		grid-template-columns: 1fr 1fr;
 		grid-template-areas:
 		'product-image product-image'
 		'product-title product-title'
-		'product-platform .'
-		'product-rating .'
-		'product-price product-link';
+		'product-platform product-rating'
+		'product-price .'
+		'product-icons product-link';
 		margin-bottom: 0;
-		padding: 20px 0;
-		height: 340px;
+		padding-top: 20px;
+		height: auto;
 	}
 
 	.product-image {
 		text-align: center;
+    height: 175px;
 		width: 100%;
 	}
+
+  .product-image .main-image {
+    padding-bottom: 10px;
+  }
+
+  .product-image .main-image img {
+    width: auto;
+  }
 
 	.product-title {
 		text-align: center;
 		padding: 0 5px;
+    margin-bottom: 15px;
 	}
 
 	.product-rating {
 		grid-template-columns: 40px 85px;
+    justify-self: end;
 	}
+
+  .product-icons {
+    justify-self: start;
+  }
 }

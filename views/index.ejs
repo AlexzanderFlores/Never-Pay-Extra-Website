@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-	<% include _head %>
 	<meta name='description' content='Never Pay Extra | The Price Comparison App | Price Check While you Shop'>
 	<meta name='keywords' content='never pay extra, price comparison app, chrome extension price comparison'>
 	<link rel='stylesheet' href='/css/index.css'>
+	<% include _head %>
 </head>
 <body>
 	<% include _navigation %>
@@ -24,19 +24,6 @@
 		</div>
 	</div>
 	<% include _footer %>
-	<script>
-		$('footer #apps-container').css('display', 'none');
-		$(document).ready(() => {
-			setTimeout(() => {
-				if($('#wrapper').attr('extension-enabled') === 'false') {
-			    if(navigator.userAgent.indexOf('Chrome') >= 0) {
-						$('#browser_plugin #chrome-app').css('animation', 'app-pulse-chrome 1s linear infinite');
-			    } else if(navigator.userAgent.indexOf('Firefox') >= 0) {
-						$('#browser_plugin #fire-fox-app').css('animation', 'app-pulse-fire-fox 1s linear infinite');
-			    }
-				}
-			}, 1000);
-		});
-	</script>
+	<script src='/scripts/index.js'></script>
 </body>
 </html>
