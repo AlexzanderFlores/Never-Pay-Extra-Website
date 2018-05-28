@@ -15,7 +15,7 @@
   'product-image . .'
   'product-image product-rating product-link'
   'product-image product-price product-link'
-	'product-image . product-icons';
+	'product-image shipping-included product-icons';
   height: 175px;
   width: 100%;
 	margin-bottom: 15px;
@@ -84,11 +84,6 @@
   font-size: 16px;
 }
 
-.product-price {
-  grid-area: product-price;
-  font-size: 16px;
-}
-
 .product-rating {
   display: grid;
 	justify-items: start;
@@ -111,6 +106,20 @@
   font-weight: 900;
 	margin-top: -7px;
 	margin-left: 2px;
+}
+
+.product-price {
+  grid-area: product-price;
+  font-size: 18px;
+}
+
+.product-price div:first-child {
+	font-weight: bold;
+}
+
+.shipping-included {
+	font-size: 12px;
+	font-style: italic;
 }
 
 .product-link {
@@ -175,7 +184,11 @@
 	}
 
 	.product-price {
-		font-size: 10px;
+		font-size: 12px;
+	}
+
+	.shipping-included {
+		font-weight: 8px;
 	}
 
 	.product-rating {

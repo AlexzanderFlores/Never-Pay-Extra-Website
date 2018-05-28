@@ -131,7 +131,8 @@ $(document).ready(() => {
 									on ${product.platformDisplay}
 								</div>
 								<div class='product-price'>
-									<strong>$${(product.price).toFixed(2)}</strong>
+									<div>$${product.price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+									<div class='shipping-included'>(Shipping Included)</div>
 								</div>`;
 								if(product.rating && product.reviews) {
 									html += `
