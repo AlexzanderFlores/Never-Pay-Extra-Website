@@ -57,7 +57,6 @@
 }
 
 .product-image .mini-image {
-	display: inline-block;
 	height: 40px;
 	width: 40px;
   border: 1px solid #FFF;
