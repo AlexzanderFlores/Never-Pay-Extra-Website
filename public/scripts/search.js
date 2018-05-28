@@ -60,10 +60,15 @@ $(document).ready(() => {
 							continue;
 						}
 
+						// Force HTTPS on the product URL
 						if(product.url && product.url.indexOf('http://') === 0) {
 							product.url = product.url.replace('http://', 'https://');
 						}
 
+						// Remove duplicate image URLs
+						product.images = product.images.filter((item, pos) => product.images.indexOf(item) === pos);
+
+						// Force HTTPS on image URLs
 						for(let a = 0; a < product.images.length; ++a) {
 							const image = product.images[a];
 							if(image && image.indexOf('http://') === 0) {
@@ -131,13 +136,13 @@ $(document).ready(() => {
 									on ${product.platformDisplay}
 								</div>
 								<div class='product-price'>
-									<strong>$${(product.price).toFixed(2)}</strong>
+									<strong>$${product.price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong>
 								</div>`;
 								if(product.rating && product.reviews) {
 									html += `
 										<div class='product-rating'>
 											<span>${Math.round(product.rating * 10) / 10} <span>&#9733;</span></span>
-											<span>${String(product.reviews).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} Reviews</span>
+											<span>${String(product.reviews).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Reviews</span>
 										</div>
 									`;
 								}
