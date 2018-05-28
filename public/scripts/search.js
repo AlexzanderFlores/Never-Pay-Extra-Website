@@ -142,7 +142,7 @@ $(document).ready(() => {
 								if(product.rating && product.reviews) {
 									html += `
 										<div class='product-rating'>
-											<span>${Math.round(product.rating * 10) / 10} <span>&#9733;</span></span>
+											<span>${Number(product.rating).toFixed(1)} <span>&#9733;</span></span>
 											<span>${String(product.reviews).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Reviews</span>
 										</div>
 									`;
