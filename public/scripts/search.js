@@ -81,7 +81,7 @@ $(document).ready(() => {
 
 						let iconCount = 0;
 						let iconHtml = '';
-						if(product.returnsAccepted) {
+						if(product.returnsAccepted || true) {
 							iconHtml += `<div class='product-icon returns-accepted' title='Returns Accepted'>&#x1f4e6</div>`;
 							++iconCount;
 						}
@@ -103,6 +103,12 @@ $(document).ready(() => {
 						}
 						if(product.gift) {
 							iconHtml += `<div class='product-icon gift' title='Gift Wrapping Available'>&#x1F381</div>`;
+							++iconCount;
+						}
+						if(product.upc) {
+							iconHtml += `
+								<a href='/track?upc=${product.upc}' target='_blank' class='product-icon track' title='Track Product Price'>&#x1F4C8</a>
+							`;
 							++iconCount;
 						}
 

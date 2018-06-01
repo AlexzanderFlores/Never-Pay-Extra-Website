@@ -32,6 +32,7 @@ const listen = (path, file) => {
 
 listen('/', 'index');
 listen('/search');
+listen('/track');
 listen('/contact-us');
 listen('/supported-websites');
 
