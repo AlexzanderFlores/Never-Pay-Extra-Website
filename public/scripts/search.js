@@ -44,7 +44,7 @@ $(document).ready(() => {
 
 	if(query) {
 		$('#query').val(query);
-		container = $('#inner_content');
+		container = $('#inner-content');
 
 		const isUPC = isStringUPC(query);
 

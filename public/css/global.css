@@ -20,12 +20,12 @@ html {
 	justify-items: center;
 }
 
-.center_v {
+.center-v {
 	display: grid;
 	align-items: center;
 }
 
-.center_h {
+.center-h {
 	display: grid;
 	justify-items: center;
 }
@@ -61,6 +61,6 @@ body {
 	padding: 40px 0;
 }
 
-#inner_content {
+#inner-content {
 	width: 100%;
 }

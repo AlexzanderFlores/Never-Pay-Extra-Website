@@ -11,17 +11,17 @@
 	<% include _navigation %>
 	<div id='wrapper'>
 		<div id='content' class='center'>
-			<div id='inner_content' class='center'>
+			<div id='inner-content' class='center'>
 				<form action='/contact-us' method='POST'>
-					<input id='email_input' class='input' name='email' type='text' placeholder='Your Email Address...' required autofocus>
-					<input id='subject_input' class='input' name='subject' type='text' placeholder='Subject...' required>
-					<textarea id='message_input' class='input' name='message' placeholder='Message...' required></textarea>
-					<span id='message_result'>
-						<% if(session.message_result) { %>
-							<%= session.message_result %>
+					<input class='input' name='email' type='text' placeholder='Your Email Address...' required autofocus>
+					<input class='input' name='subject' type='text' placeholder='Subject...' required>
+					<textarea class='input' name='message' placeholder='Message...' required></textarea>
+					<span id='message-result'>
+						<% if(session['email-message-result']) { %>
+							<%= session['email-message-result'] %>
 						<% } %>
 					</span>
-					<input id='submit_button' type='submit' value='Send Email'>
+					<input type='submit' value='Send Email'>
 				</form>
 			</div>
 		</div>

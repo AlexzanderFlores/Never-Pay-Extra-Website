@@ -8,13 +8,25 @@
 </head>
 <body>
 	<% include _navigation %>
-	<div id='wrapper' extension-enabled='false'>
+	<div id='wrapper'>
 		<div id='content' class='center'>
-			<div id='inner_content' class='center'>
-				Hello World
+			<div id='inner-content' class='center'>
+				<form action='/track' method='POST'>
+					<input type='email' name='email' placeholder='Email (Optional)' autofocus>
+					<input type='text' name='phone' placeholder='Phone (Optional)'>
+					<input type='text' name='target' placeholder='Target Price' required>
+					<span id='message-result'>
+						<% if(session['track-message-result']) { %>
+							<%= session['track-message-result'] %>
+						<% } %>
+					</span>
+					<input type='text' name='upc'></span>
+					<input type='submit' value='Track Product'>
+				</form>
 			</div>
 		</div>
 	</div>
 	<% include _footer %>
+	<script src='/scripts/track.js'></script>
 </body>
 </html>

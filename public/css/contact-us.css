@@ -1,18 +1,13 @@
-#inner_content form {
+#inner-content form {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(5, auto);
-	grid-template-areas:
-	'email_input subject_input'
-	'message_input message_input'
-	'sent_message sent_message'
-	'submit_button submit_button'
-	;
+	grid-template-areas: 'contact-email contact-subject' 'contact-message contact-message' 'contact-sent contact-sent' 'contact-submit contact-submit';
 	grid-gap: 20px;
 	width: 600px;
 }
 
-#inner_content form .input {
+#inner-content form .input {
 	padding: 10px 15px;
 	border-radius: 3px;
 	border: 1px solid #CCC;
@@ -20,65 +15,56 @@
 	resize: none;
 }
 
-#inner_content form input {
+#inner-content form input {
 	height: 50px;
 }
 
-#inner_content #email_input {
-	grid-area: email_input;
+input[name='email'] {
+	grid-area: contact-email;
 }
 
-#inner_content #subject_input {
-	grid-area: subject_input;
+input[name='subject'] {
+	grid-area: contact-subject;
 }
 
-#inner_content #message_input {
-	grid-area: message_input;
+textarea {
+	grid-area: contact-message;
 	height: 300px;
 }
 
-#inner_content #message_result {
+#message-result {
 	display: grid;
 	justify-self: center;
-	grid-area: sent_message;
+	grid-area: contact-sent;
 	text-align: center;
 	font-size: 18px;
 	color: #555;
 }
 
-#inner_content #submit_button {
+#inner-content input[type='submit'] {
 	display: grid;
 	justify-self: center;
-	grid-area: submit_button;
+	grid-area: contact-submit;
 	width: 350px;
 	font-size: 20px;
 	background-color: #FA5C76;
 	color: #FFF;
 	border-radius: 5px;
 	border: 1px solid #CCC;
-}
-
-#inner_content #submit_button:hover {
 	cursor: pointer;
 }
 
 @media screen and (max-width: 650px) {
-	#inner_content form {
+	#inner-content form {
 		grid-template-columns: none;
 		grid-template-rows: repeat(5, auto);
-		grid-template-areas:
-		'email_input'
-		'subject_input'
-		'message_input'
-		'sent_message'
-		'submit_button'
-		;
+		grid-template-areas: 'email' 'subject' 'message' 'sent' 'submit';
 		width: 95%;
 	}
 }
 
 @media screen and (max-width: 400px) {
-	#inner_content #submit_button {
+	#inner-content #submit-button {
 		width: 95%;
 	}
 }

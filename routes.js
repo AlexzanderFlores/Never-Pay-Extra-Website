@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const sitemap = require('express-sitemap');
+const rp = require('request-promise');
 const router = express.Router();
 
 const mapData = {
@@ -38,14 +39,28 @@ listen('/supported-websites');
 
 sitemap(mapData).XMLtoFile('./sitemap.xml');
 
-router.post('/contact-us', (req, res) => {
-	const email = req.body.email;
-	const subject = req.body.subject;
-	const message = req.body.message;
-	if(email && subject && message) {
-		req.session.message_result = 'Your message has been sent! We\'ll get back to you via email within 48 hours';
+router.post('/contact-us', async (req, res) => {
+	const to = 'neverpayextra@gmail.com';
+	const subject = encodeURI(`Customer Support - ${req.body.subject}`);
+	const text = encodeURI(`${req.body.message}\n\nFROM ${req.body.email}`);
+
+	const accepted = JSON.parse(await rp.post({
+		uri: 'https://api.neverpayextra.com/v1/send-email',
+		headers: { to, subject, text }
+	})).accepted.length > 0;
+
+	if(accepted) {
+		req.session['email-message-result'] = 'Your message has been sent! We\'ll get back to you via email within 48 hours';
+	} else {
+		req.session['email-message-result'] = 'An error occurred. Please email us: NeverPayExtra@gmail.com';
 	}
+	
 	res.render('contact-us', { session: req.session});
+});
+
+router.post('/track', (req, res) => {
+	req.session['track-message-result'] = `This product has been tracked! We'll check the price daily and notify you when it drops below ${req.body.target}`;
+	res.render('track', { session: req.session });
 });
 
 router.get('/chrome', (req, res) => res.redirect('https://chrome.google.com/webstore/detail/lkocokbbpjnnfhibjlnhfkkibjdjdkoi'));

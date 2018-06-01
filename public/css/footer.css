@@ -40,7 +40,7 @@ footer {
 	grid-area: social-container;
 }
 
-#footer #social-container #social_list i {
+#footer #social-container #social-list i {
 	background: -webkit-linear-gradient(#FD5785, #F86668);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -66,10 +66,7 @@ footer {
 		grid-template-rows: repeat(4, auto);
 		grid-template-columns: none;
 		grid-template-areas:
-		'company-menu'
-		'apps-container'
-		'social-container'
-		'legal';
+		'company-menu' 'apps-container' 'social-container' 'legal';
 		width: 80%;
 		grid-row-gap: 10px;
 	}

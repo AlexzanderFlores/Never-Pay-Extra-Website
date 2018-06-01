@@ -1,11 +1,11 @@
-#social_list {
+#social-list {
 	display: grid;
 	grid-template-columns: repeat(3, auto);
 	grid-column-gap: 10px;
 	width: 127px;
 }
 
-#social_list a {
+#social-list a {
 	font-size: 45px;
 	color: #FFF;
 }

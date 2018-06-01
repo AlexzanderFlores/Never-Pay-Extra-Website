@@ -1,0 +1,66 @@
+#inner-content form {
+	display: grid;
+	grid-template-rows: repeat(5, auto);
+	grid-template-columns: 100%;
+	grid-template-areas: 'track-email' 'track-phone' 'track-target' 'track-sent' 'track-submit';
+	grid-gap: 20px;
+	width: 600px;
+}
+
+#inner-content form input {
+	height: 50px;
+	padding: 10px 15px;
+	border-radius: 3px;
+	border: 1px solid #CCC;
+	font-size: 18px;
+}
+
+#inner-content form input[name='email'] {
+	grid-area: track-email;
+}
+
+#inner-content form input[name='phone'] {
+	grid-area: track-phone;
+}
+
+#inner-content form input[name='target'] {
+	grid-area: track-target;
+}
+
+#inner-content #message-result {
+	display: grid;
+	grid-area: track-sent;
+	justify-self: center;
+	text-align: center;
+	font-size: 18px;
+	color: #555;
+}
+
+#inner-content form input[name='upc'] {
+	display: none;
+}
+
+#inner-content form input[type='submit'] {
+	display: grid;
+	grid-area: track-submit;
+	justify-self: center;
+	width: 350px;
+	font-size: 20px;
+	background-color: #FA5C76;
+	color: #FFF;
+	border-radius: 5px;
+	border: 1px solid #CCC;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 650px) {
+	#inner-content form {
+		width: 95%;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#inner-content form input[type='submit'] {
+		width: 95%;
+	}
+}
