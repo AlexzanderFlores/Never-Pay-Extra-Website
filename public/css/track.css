@@ -36,7 +36,7 @@
 	color: #555;
 }
 
-#inner-content form input[name='upc'] {
+#inner-content .hidden {
 	display: none;
 }
 

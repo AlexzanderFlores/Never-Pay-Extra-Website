@@ -61,8 +61,11 @@ $(document).ready(() => {
 						}
 
 						// Force HTTPS on the product URL
-						if(product.url && product.url.indexOf('http://') === 0) {
-							product.url = product.url.replace('http://', 'https://');
+						if(product.url) {
+							if(product.url.indexOf('http://') === 0) {
+								product.url = product.url.replace('http://', 'https://');
+							}
+							product.url = `${product.url}&never-pay-extra=true`;
 						}
 
 						// Remove duplicate image URLs
@@ -106,8 +109,9 @@ $(document).ready(() => {
 							++iconCount;
 						}
 						if(product.upc) {
+							const name = product.name.replace(/ /g, '+');
 							iconHtml += `
-								<a href='/track?upc=${product.upc}' target='_blank' class='product-icon track' title='Track Product Price'>&#x1F4C8</a>
+								<a href='/track?upc=${product.upc}&name=${name}' target='_blank' class='product-icon track' title='Track Product Price'>&#x1F4C8</a>
 							`;
 							++iconCount;
 						}

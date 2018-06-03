@@ -39,28 +39,56 @@ listen('/supported-websites');
 
 sitemap(mapData).XMLtoFile('./sitemap.xml');
 
-router.post('/contact-us', async (req, res) => {
+router.post('/contact-us', (req, res) => {
 	const to = 'neverpayextra@gmail.com';
 	const subject = encodeURI(`Customer Support - ${req.body.subject}`);
 	const text = encodeURI(`${req.body.message}\n\nFROM ${req.body.email}`);
 
-	const accepted = JSON.parse(await rp.post({
+	rp.post({
 		uri: 'https://api.neverpayextra.com/v1/send-email',
 		headers: { to, subject, text }
-	})).accepted.length > 0;
+	}, (err, data) => {
+		if(err) {
+			req.session['email-message-result'] = 'An error occurred. Please email us: NeverPayExtra@gmail.com';
+		} else {
+			req.session['email-message-result'] = 'Your message has been sent! We\'ll get back to you via email within 48 hours';
+		}
 
-	if(accepted) {
-		req.session['email-message-result'] = 'Your message has been sent! We\'ll get back to you via email within 48 hours';
-	} else {
-		req.session['email-message-result'] = 'An error occurred. Please email us: NeverPayExtra@gmail.com';
-	}
-	
-	res.render('contact-us', { session: req.session});
+		res.render('contact-us', { session: req.session});
+	});
 });
 
 router.post('/track', (req, res) => {
-	req.session['track-message-result'] = `This product has been tracked! We'll check the price daily and notify you when it drops below ${req.body.target}`;
-	res.render('track', { session: req.session });
+	const upc = req.body.upc;
+	if(!upc) {
+		return res.redirect('/');
+	}
+	const target = req.body.target;
+	const email = req.body.email;
+	const phone = req.body.phone;
+	const name = req.body.name;
+
+	if(!email && !phone) {
+		return req.session['track-message-result'] = 'You must provide at least your email address or phone number.';
+	}
+
+	const headers = { upc, target, name };
+	if(email) {
+		headers.email = email;
+	}
+	if(phone) {
+		headers.phone = phone;
+	}
+
+	rp.post({ uri: 'https://api.neverpayextra.com/v1/track-upc', headers }).then(data => {
+		req.session['track-message-result'] = `This product has been tracked! We'll check the price daily and notify you when it drops below ${req.body.target}`;
+
+		res.render('track', { session: req.session });
+	}).catch(err => {
+		req.session['track-message-result'] = `There was an error when tracking the product. Please <a href='/contact-us' target='_blank'>contact us here</a>.`;
+
+		res.render('track', { session: req.session });
+	});
 });
 
 router.get('/chrome', (req, res) => res.redirect('https://chrome.google.com/webstore/detail/lkocokbbpjnnfhibjlnhfkkibjdjdkoi'));
