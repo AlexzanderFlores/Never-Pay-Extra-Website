@@ -4,8 +4,8 @@
 }
 
 .prime-offering {
-	position: absolute;
-	right: 0;
+	position: fixed;
+	right: -5px;
 	top: 25%;
 	overflow: hidden;
 	width: 0;
