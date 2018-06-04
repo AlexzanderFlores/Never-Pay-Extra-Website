@@ -9,6 +9,7 @@ const foundWebsites = {};
 let websiteCount = 0;
 let totalProducts = 0;
 let container;
+let primeOffered = false;
 
 const isStringUPC = query => {
 	return query && query.length === 12 && typeof(query) != 'boolean' && !isNaN(query);
@@ -160,7 +161,10 @@ $(document).ready(() => {
 							++iconCount;
 						}
 
-						const price = (+product.price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+						const noNums = /\B(?=(\d{3})+(?!\d))/g;
+
+						const price = (+product.price).toFixed(2).replace(noNums, ',');
+						const reviews = String(product.reviews).replace(noNums, ',');
 
 						let html = `
 							<div class='product' website='${product.platformDisplay}' price='${price}' fast-shipping='${product.fewDayShipping}' returns='${product.returnsAccepted}' trackable=${product.upc !== undefined}>
@@ -199,7 +203,7 @@ $(document).ready(() => {
 									html += `
 										<div class='product-rating'>
 											<span>${Number(product.rating).toFixed(1)} <span>&#9733;</span></span>
-											<span>${String(product.reviews).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Reviews</span>
+											<span>${reviews} Reviews</span>
 										</div>
 									`;
 								}
@@ -324,6 +328,17 @@ $(document).ready(() => {
 		const container = $(event.target);
 		const checked = String(container.prop('checked'));
 
+		if(!primeOffered) {
+			// TODO: Use a Cookie to check if we've offered them Prime
+			primeOffered = true;
+			$('#prime-offering').css('width', '300px');
+			$('#prime-offering').css('border', '1px solid #333');
+		} else {
+			primeOffered = false;
+			$('#prime-offering').css('width', '0px');
+			setTimeout(() => $('#prime-offering').css('border', 'none'), 250);
+		}
+
 		$('.product').each(function() {
 			const isFastShipping = $(this).attr('fast-shipping');
 			const reasons = $(this).attr('hide-reasons');
@@ -404,3 +419,23 @@ $(document).ready(() => {
 		});
 	});
 });
+
+const closePrimeOffering = id => {
+	$(`#${id}`).css('width', '0px');
+	setTimeout(() => $(`#${id}`).css('border', 'none'), 250);
+};
+
+$('#prime-offering-yes').on('click', () => {
+	closePrimeOffering('prime-offering');
+	// TODO: Set a Cookie that says we've checked if they have prime
+});
+
+$('#prime-offering-no').on('click', () => {
+	$('#prime-trial-offering').css('width', '300px');
+	$('#prime-trial-offering').css('border', '1px solid #333');
+	closePrimeOffering('prime-offering');
+});
+
+$('#prime-trial-offering-yes').on('click', () => closePrimeOffering('prime-trial-offering'));
+
+$('#prime-trial-offering-no').on('click', () => closePrimeOffering('prime-trial-offering'));
