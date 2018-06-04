@@ -254,29 +254,19 @@ $(document).ready(() => {
 		$('nav form').attr('action', '/search?q=' + $(this).val());
 	});
 
-	$('#inner-content').on('click', '#platform-filter input[type="checkbox"]', event => {
+	$('#inner-content').on('click', '#platform-filter input[type=checkbox]', event => {
 		const container = $(event.target);
 		const website = container.attr('id');
 		const checked = container.prop('checked');
 
 		$('.product').each(function() {
 			if($(this).attr('website') === website) {
-				const reasons = $(this).attr('hide-reasons');
-				const split = reasons ? reasons.split(',') : [];
+				const split = getSplit($(this));
 
 				if(checked) {
-					const index = split.indexOf('bad-platform');
-					if(index > -1) {
-						split.splice(index, 1);
-					}
-					if(split.length === 0) {
-						$(this).css('display', 'grid');
-					}
+					tryDisplay(split, 'bad-platform', $(this));
 				} else {
-					if(split.indexOf('bad-platform') === -1) {
-						split.push('bad-platform');
-					}
-					$(this).css('display', 'none');
+          tryHide(split, 'bad-platform', $(this));
 				}
 
 				$(this).attr('hide-reasons', split.join(','));
@@ -302,123 +292,73 @@ $(document).ready(() => {
 
 		$('.product').each(function() {
 			const price = +($(this).attr('price'));
-			const reasons = $(this).attr('hide-reasons');
-			const split = reasons ? reasons.split(',') : [];
+			const split = getSplit($(this));
 
 			if(price >= minPrice && price <= maxPrice) {
-				const index = split.indexOf('bad-price');
-				if(index > -1) {
-					split.splice(index, 1);
-				}
-				if(split.length === 0) {
-					$(this).css('display', 'grid');
-				}
+				tryDisplay(split, 'bad-price', $(this));
 			} else {
-				if(split.indexOf('bad-price') === -1) {
-					split.push('bad-price');
-				}
-				$(this).css('display', 'none');
+        tryHide(split, 'bad-price', $(this));
 			}
 
 			$(this).attr('hide-reasons', split.join(','));
 		});
 	});
 
-	$('#inner-content').on('click', '#attributes-filter input[id="shipping-filter"]', event => {
-		const container = $(event.target);
-		const checked = String(container.prop('checked'));
-
+	$('#inner-content').on('click', '#attributes-filter input[id=shipping-filter]', event => {
 		if(!primeOffered) {
 			// TODO: Use a Cookie to check if we've offered them Prime
-			primeOffered = true;
 			$('#prime-offering').css('width', '300px');
 			$('#prime-offering').css('border', '1px solid #333');
-		} else {
-			primeOffered = false;
-			$('#prime-offering').css('width', '0px');
-			setTimeout(() => $('#prime-offering').css('border', 'none'), 250);
 		}
 
-		$('.product').each(function() {
-			const isFastShipping = $(this).attr('fast-shipping');
-			const reasons = $(this).attr('hide-reasons');
-			const split = reasons ? reasons.split(',') : [];
-
-			if(checked === 'false' || checked === isFastShipping) {
-				const index = split.indexOf('not-fast-shipping');
-				if(index > -1) {
-					split.splice(index, 1);
-				}
-				if(split.length === 0) {
-					$(this).css('display', 'grid');
-				}
-			} else {
-				if(split.indexOf('not-fast-shipping') === -1) {
-					split.push('not-fast-shipping');
-				}
-				$(this).css('display', 'none');
-			}
-
-			$(this).attr('hide-reasons', split.join(','));
-		});
+    tryFilter('fast-shipping', String($(event.target).prop('checked')), 'not-fast-shipping');
 	});
 
-	$('#inner-content').on('click', '#attributes-filter input[id="returns-filter"]', event => {
-		const container = $(event.target);
-		const checked = String(container.prop('checked'));
-
-		$('.product').each(function() {
-			const returnsAvailable = $(this).attr('returns');
-			const reasons = $(this).attr('hide-reasons');
-			const split = reasons ? reasons.split(',') : [];
-
-			if(checked === 'false' || checked === returnsAvailable) {
-				const index = split.indexOf('returns-unavailable');
-				if(index > -1) {
-					split.splice(index, 1);
-				}
-				if(split.length === 0) {
-					$(this).css('display', 'grid');
-				}
-			} else {
-				if(split.indexOf('returns-unavailable') === -1) {
-					split.push('returns-unavailable');
-				}
-				$(this).css('display', 'none');
-			}
-
-			$(this).attr('hide-reasons', split.join(','));
-		});
+	$('#inner-content').on('click', '#attributes-filter input[id=returns-filter]', event => {
+		tryFilter('returns', String($(event.target).prop('checked')), 'returns-unavailable');
 	});
 
-	$('#inner-content').on('click', '#attributes-filter input[id="trackable-filter"]', event => {
-		const container = $(event.target);
-		const checked = String(container.prop('checked'));
-
-		$('.product').each(function() {
-			const returnsAvailable = $(this).attr('trackable');
-			const reasons = $(this).attr('hide-reasons');
-			const split = reasons ? reasons.split(',') : [];
-
-			if(checked === 'false' || checked === returnsAvailable) {
-				const index = split.indexOf('not-trackable');
-				if(index > -1) {
-					split.splice(index, 1);
-				}
-				if(split.length === 0) {
-					$(this).css('display', 'grid');
-				}
-			} else {
-				if(split.indexOf('not-trackable') === -1) {
-					split.push('not-trackable');
-				}
-				$(this).css('display', 'none');
-			}
-
-			$(this).attr('hide-reasons', split.join(','));
-		});
+	$('#inner-content').on('click', '#attributes-filter input[id=trackable-filter]', event => {
+		tryFilter('trackable', String($(event.target).prop('checked')), 'not-trackable');
 	});
 });
+
+const getSplit = container => {
+  const reasons = container.attr('hide-reasons');
+  return reasons ? reasons.split(',') : [];
+};
+
+const tryDisplay = (split, reason, container) => {
+  const index = split.indexOf(reason);
+  if(index > -1) {
+    split.splice(index, 1);
+  }
+  if(split.length === 0) {
+    container.css('display', 'grid');
+  }
+};
+
+const tryHide = (split, reason, container) => {
+  if(split.indexOf(reason) === -1) {
+    split.push(reason);
+  }
+  container.css('display', 'none');
+};
+
+const tryFilter = (attribute, state, reason) => {
+  $('.product').each(function() {
+    const attr = $(this).attr(attribute);
+    const split = getSplit($(this));
+
+    if(state === 'false' || state === attr) {
+      tryDisplay(split, reason, $(this));
+    } else {
+      tryHide(split, reason, $(this));
+    }
+
+    $(this).attr('hide-reasons', split.join(','));
+  });
+};
 
 const closePrimeOffering = id => {
 	$(`#${id}`).css('width', '0px');
