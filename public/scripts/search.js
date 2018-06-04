@@ -5,6 +5,9 @@ const websites = [
 	'bestbuy',
 	'walmart'
 ];
+const foundWebsites = {};
+let websiteCount = 0;
+let totalProducts = 0;
 let container;
 
 const isStringUPC = query => {
@@ -28,10 +31,40 @@ const isRelated = (product, query) => {
 	return false;
 };
 
-const displayProducts = () => {
+const displayProducts = query => {
 	foundProducts.sort((a, b) => a.price > b.price ? 1 : a.price < b.price ? -1 : 0);
 
-	let html = '';
+	let html = `
+		<div id='filter'>
+		<h1>We found ${totalProducts} products on ${websiteCount} websites</h1>
+		<div id='platform-filter'>
+		<span class='filter-title'>Platform:</span>`;
+		for(let website of Object.keys(foundWebsites)) {
+			html += `<span class='filter'><input type='checkbox' id='${website}' checked='checked'><label for='${website}'>${website} (${foundWebsites[website]})</label></span>`;
+		}
+		html += `</div>`; // #platform-filter
+		html += `
+			<div id='price-filter'>
+				<span class='filter-title'>Price:</span>
+				<span class='filter'><label for='min-price'>Min Price: </label><input type='text' id='min-price' maxlength='8'></span>
+				<span class='filter'><label for='max-price'>Max Price: </label><input type='text' id='max-price' maxlength='8'></span>
+			</div>
+			<div id='attributes-filter'>
+				<span class='filter-title'>Attributes:</span>
+				<span class='filter'>
+					<input type='checkbox' id='shipping-filter'>
+					<label for='shipping-filter'>2-3 Day Shipping Only</label>
+				</span>
+				<span class='filter'>
+					<input type='checkbox' id='returns-filter'>
+					<label for='returns-filter'>Returns Accepted</label>
+				</span>
+				<span class='filter'>
+					<input type='checkbox' id='trackable-filter'>
+					<label for='trackable-filter'>Price Trackable</label>
+				</span>
+			</div>
+		</div>`; // #filter
 	for(let product of foundProducts) {
 		html += product.html;
 	}
@@ -47,6 +80,8 @@ $(document).ready(() => {
 		container = $('#inner-content');
 
 		const isUPC = isStringUPC(query);
+		totalProducts = 0;
+		websiteCount = 0;
 
 		for(let site of websites) {
 			const url = `https://api.neverpayextra.com/v1/search/${site}?query=${query.replace(/ /g, '+')}`;
@@ -58,6 +93,15 @@ $(document).ready(() => {
 					for(let product of products) {
 						if(!isUPC && !isRelated(product, query)) {
 							continue;
+						}
+
+						++totalProducts;
+
+						if(foundWebsites[product.platformDisplay]) {
+							++foundWebsites[product.platformDisplay];
+						} else {
+							foundWebsites[product.platformDisplay] = 1;
+							++websiteCount;
 						}
 
 						// Force HTTPS on the product URL
@@ -84,7 +128,7 @@ $(document).ready(() => {
 
 						let iconCount = 0;
 						let iconHtml = '';
-						if(product.returnsAccepted || true) {
+						if(product.returnsAccepted) {
 							iconHtml += `<div class='product-icon returns-accepted' title='Returns Accepted'>&#x1f4e6</div>`;
 							++iconCount;
 						}
@@ -116,8 +160,10 @@ $(document).ready(() => {
 							++iconCount;
 						}
 
+						const price = (+product.price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
 						let html = `
-							<div class='product'>
+							<div class='product' website='${product.platformDisplay}' price='${price}' fast-shipping='${product.fewDayShipping}' returns='${product.returnsAccepted}' trackable=${product.upc !== undefined}>
 								<div class='product-image center${multiImage}' original-image='${product.images[0]}'>
 									<a href='${product.url}' target='_blank' class='main-image center'>
 										<img src='${product.images[0]}'>
@@ -146,7 +192,7 @@ $(document).ready(() => {
 									on ${product.platformDisplay}
 								</div>
 								<div class='product-price'>
-									<div>$${product.price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+									<div>$${price}</div>
 									<div class='shipping-included'>(Shipping Included)</div>
 								</div>`;
 								if(product.rating && product.reviews) {
@@ -166,14 +212,14 @@ $(document).ready(() => {
 
 						product.html = html;
 						foundProducts.push(product);
-						displayProducts();
+						displayProducts(query);
 					}
 				}
 			}).fail((xhr, text, error) => {
 				console.log('Status: ' + xhr.status);
 				console.log('Text: ' + text);
 				console.log('Error: ' + error);
-				displayProducts();
+				displayProducts(query);
 			});
 		}
 	}
@@ -200,7 +246,161 @@ $(document).ready(() => {
 		container.attr('original-image', target.attr('src'));
 	});
 
-	$('#query').on('change paste keyup', () => {
+	$('#query').on('change paste keyup', function() {
 		$('nav form').attr('action', '/search?q=' + $(this).val());
+	});
+
+	$('#inner-content').on('click', '#platform-filter input[type="checkbox"]', event => {
+		const container = $(event.target);
+		const website = container.attr('id');
+		const checked = container.prop('checked');
+
+		$('.product').each(function() {
+			if($(this).attr('website') === website) {
+				const reasons = $(this).attr('hide-reasons');
+				const split = reasons ? reasons.split(',') : [];
+
+				if(checked) {
+					const index = split.indexOf('bad-platform');
+					if(index > -1) {
+						split.splice(index, 1);
+					}
+					if(split.length === 0) {
+						$(this).css('display', 'grid');
+					}
+				} else {
+					if(split.indexOf('bad-platform') === -1) {
+						split.push('bad-platform');
+					}
+					$(this).css('display', 'none');
+				}
+
+				$(this).attr('hide-reasons', split.join(','));
+			}
+		});
+	});
+
+	$('#inner-content').on('change paste keyup', '#price-filter input', function() {
+		let val = $(this).val();
+		if(val === '$') {
+			val = '';
+			$(this).val(val);
+		} else if(val.indexOf('$') === -1 && val.length > 0) {
+			val = `$${val}`;
+			$(this).val(val);
+		}
+
+		const minPrice = +(String($('#min-price').val()).replace(/[^0-9.]/g, ''));
+		let maxPrice = +(String($('#max-price').val()).replace(/[^0-9.]/g, ''));
+		if(maxPrice === 0) {
+			maxPrice = 999999999;
+		}
+
+		$('.product').each(function() {
+			const price = +($(this).attr('price'));
+			const reasons = $(this).attr('hide-reasons');
+			const split = reasons ? reasons.split(',') : [];
+
+			if(price >= minPrice && price <= maxPrice) {
+				const index = split.indexOf('bad-price');
+				if(index > -1) {
+					split.splice(index, 1);
+				}
+				if(split.length === 0) {
+					$(this).css('display', 'grid');
+				}
+			} else {
+				if(split.indexOf('bad-price') === -1) {
+					split.push('bad-price');
+				}
+				$(this).css('display', 'none');
+			}
+
+			$(this).attr('hide-reasons', split.join(','));
+		});
+	});
+
+	$('#inner-content').on('click', '#attributes-filter input[id="shipping-filter"]', event => {
+		const container = $(event.target);
+		const checked = String(container.prop('checked'));
+
+		$('.product').each(function() {
+			const isFastShipping = $(this).attr('fast-shipping');
+			const reasons = $(this).attr('hide-reasons');
+			const split = reasons ? reasons.split(',') : [];
+
+			if(checked === 'false' || checked === isFastShipping) {
+				const index = split.indexOf('not-fast-shipping');
+				if(index > -1) {
+					split.splice(index, 1);
+				}
+				if(split.length === 0) {
+					$(this).css('display', 'grid');
+				}
+			} else {
+				if(split.indexOf('not-fast-shipping') === -1) {
+					split.push('not-fast-shipping');
+				}
+				$(this).css('display', 'none');
+			}
+
+			$(this).attr('hide-reasons', split.join(','));
+		});
+	});
+
+	$('#inner-content').on('click', '#attributes-filter input[id="returns-filter"]', event => {
+		const container = $(event.target);
+		const checked = String(container.prop('checked'));
+
+		$('.product').each(function() {
+			const returnsAvailable = $(this).attr('returns');
+			const reasons = $(this).attr('hide-reasons');
+			const split = reasons ? reasons.split(',') : [];
+
+			if(checked === 'false' || checked === returnsAvailable) {
+				const index = split.indexOf('returns-unavailable');
+				if(index > -1) {
+					split.splice(index, 1);
+				}
+				if(split.length === 0) {
+					$(this).css('display', 'grid');
+				}
+			} else {
+				if(split.indexOf('returns-unavailable') === -1) {
+					split.push('returns-unavailable');
+				}
+				$(this).css('display', 'none');
+			}
+
+			$(this).attr('hide-reasons', split.join(','));
+		});
+	});
+
+	$('#inner-content').on('click', '#attributes-filter input[id="trackable-filter"]', event => {
+		const container = $(event.target);
+		const checked = String(container.prop('checked'));
+
+		$('.product').each(function() {
+			const returnsAvailable = $(this).attr('trackable');
+			const reasons = $(this).attr('hide-reasons');
+			const split = reasons ? reasons.split(',') : [];
+
+			if(checked === 'false' || checked === returnsAvailable) {
+				const index = split.indexOf('not-trackable');
+				if(index > -1) {
+					split.splice(index, 1);
+				}
+				if(split.length === 0) {
+					$(this).css('display', 'grid');
+				}
+			} else {
+				if(split.indexOf('not-trackable') === -1) {
+					split.push('not-trackable');
+				}
+				$(this).css('display', 'none');
+			}
+
+			$(this).attr('hide-reasons', split.join(','));
+		});
 	});
 });

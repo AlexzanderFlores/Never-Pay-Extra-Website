@@ -3,6 +3,48 @@
   padding: 0 10px;
 }
 
+#filter {
+  margin-bottom: 50px;
+}
+
+#filter > div {
+  margin-bottom: 5px;
+}
+
+#filter h1 {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+#filter .filter-title {
+  font-weight: bold;
+}
+
+#filter input {
+  font-size: 18px;
+}
+
+#platform-filter input, #attributes-filter input {
+  margin-right: 5px;
+}
+
+#price-filter input {
+  margin-left: 5px;
+}
+
+#platform-filter span, #attributes-filter span {
+  margin-right: 15px;
+}
+
+#price-filter .dynamic-filter {
+  margin-left: 15px;
+}
+
+#price-filter input {
+  width: 95px;
+}
+
 .product {
   display: grid;
   align-items: center;
@@ -151,7 +193,15 @@
 }
 
 @media screen and (max-width: 850px) {
-	.product {
+  .filter {
+    display: block;
+  }
+
+  .filter input[type='text'] {
+    margin: 3px 0;
+  }
+
+  .product {
 		grid-template-columns: 175px auto 150px;
 		grid-template-areas:
 	  'product-image . .'
