@@ -110,7 +110,8 @@ $(document).ready(() => {
 							if(product.url.indexOf('http://') === 0) {
 								product.url = product.url.replace('http://', 'https://');
 							}
-							product.url = `${product.url}&never-pay-extra=true`;
+							const symbol = product.url.indexOf('?') >= 0 ? '&' : '?';
+							product.url = `${product.url}${symbol}never-pay-extra=true`;
 						}
 
 						// Remove duplicate image URLs
