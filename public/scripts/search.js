@@ -306,11 +306,11 @@ $(document).ready(() => {
 	});
 
 	$('#inner-content').on('click', '#attributes-filter input[id=shipping-filter]', event => {
-		if(!primeOffered) {
-			// TODO: Use a Cookie to check if we've offered them Prime
-			$('#prime-offering').css('width', '300px');
-			$('#prime-offering').css('border', '1px solid #333');
-		}
+		// if(!primeOffered) {
+		// 	// TODO: Use a Cookie to check if we've offered them Prime
+		// 	$('#prime-offering').css('width', '300px');
+		// 	$('#prime-offering').css('border', '1px solid #333');
+		// }
 
     tryFilter('fast-shipping', String($(event.target).prop('checked')), 'not-fast-shipping');
 	});
