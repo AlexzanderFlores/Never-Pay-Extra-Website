@@ -218,6 +218,9 @@ $(document).ready(() => {
 						product.html = html;
 						foundProducts.push(product);
 						displayProducts(query);
+						if(product.platformDisplay === 'eBay') {
+							$.getScript('https://epnt.ebay.com/static/epn-smart-tools.js');
+						}
 					}
 				}
 			}).fail((xhr, text, error) => {
