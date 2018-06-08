@@ -11,7 +11,9 @@ const mapData = {
 };
 
 router.use((req, res, next) => {
-	console.log(req.connection.remoteAddress.replace('::ffff:', '') + ' connected to ' + req.url);
+	const address = req.connection.remoteAddress.replace('::ffff:', '');
+	const from = req.headers.referer;
+	console.log(`${address} connected to ${req.url} from ${from}`);
 	const host = req.headers.host;
 	const isWWW = host.split('.').indexOf('www') !== -1;
 	const www = isWWW ? '' : 'www.';
@@ -63,14 +65,16 @@ router.post('/track', (req, res) => {
 	if(!upc) {
 		return res.redirect('/');
 	}
-	const target = req.body.target;
+
 	const email = req.body.email;
 	const phone = req.body.phone;
-	const name = req.body.name;
 
-	if(!email && !phone) {
-		return req.session['track-message-result'] = 'You must provide at least your email address or phone number.';
+	if(email === '' && phone === '') {
+		return res.redirect(req.headers.referer);
 	}
+
+	const target = req.body.target;
+	const name = req.body.name;
 
 	const headers = { upc, target, name };
 	if(email) {
@@ -92,6 +96,8 @@ router.post('/track', (req, res) => {
 });
 
 router.get('/chrome', (req, res) => res.redirect('https://chrome.google.com/webstore/detail/lkocokbbpjnnfhibjlnhfkkibjdjdkoi'));
+
+router.get('/firefox', (req, res) => res.redirect('https://addons.mozilla.org/en-US/firefox/addon/never-pay-extra/'));
 
 router.get('/robots.txt', (req, res) => {
 	res.type('text/plain');
