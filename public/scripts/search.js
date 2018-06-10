@@ -74,20 +74,21 @@ const displayProducts = query => {
 
 $(document).ready(() => {
 	const url = new URL(window.location.href);
-	const query = url.searchParams.get('q');
+	let query = url.searchParams.get('q');
 
 	if(query) {
 		$('#query').val(query);
 		container = $('#inner-content');
+		query = query.replace(/ /g, '+');
 
 		const isUPC = isStringUPC(query);
 		totalProducts = 0;
 		websiteCount = 0;
 
 		for(let site of websites) {
-			const url = `https://api.neverpayextra.com/v1/search/${site}?query=${query.replace(/ /g, '+')}`;
+			const url = `https://api.neverpayextra.com/v1/search/${site}?query=${query}`;
 
-			$.get(url).done(data => {
+			$.get(url).then(data => {
 				const products = data;
 
 				if(products && products.errorMessage === undefined && products.length) {

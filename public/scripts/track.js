@@ -1,4 +1,5 @@
 $(document).ready(() => {
+	let callingCode = '1';
 	const url = new URL(window.location.href);
 	const upc = url.searchParams.get('upc');
 	let name = url.searchParams.get('name');
@@ -19,7 +20,7 @@ $(document).ready(() => {
 			val = '';
 			$(this).val(val);
 		} else if(val.indexOf('+') === -1 && val.length > 0) {
-			val = `+${val}`;
+			val = `+${callingCode}${val}`;
 			$(this).val(val);
 		}
 	});
@@ -43,5 +44,10 @@ $(document).ready(() => {
 			emailContainer.focus();
 			event.preventDefault();
 		}
+	});
+
+	$.get(`http://api.ipify.org/?format=json`).then(data => {
+		const uriBase = 'https://api.neverpayextra.com/v1/data-from-ip';
+		$.get(`${uriBase}?address=${data.ip}`).then(data => callingCode = data);
 	});
 });
