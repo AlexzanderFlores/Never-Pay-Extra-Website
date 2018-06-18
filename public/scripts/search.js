@@ -9,10 +9,14 @@ const foundWebsites = {};
 let websiteCount = 0;
 let totalProducts = 0;
 let container;
-let primeOffered = false;
 
 const isStringUPC = query => {
 	return query && query.length === 12 && typeof(query) != 'boolean' && !isNaN(query);
+};
+
+const isStringISBN = query => {
+	query = query.replace('-', '');
+	return query && query.length === 13 && typeof(query) != 'boolean' && !isNaN(query);
 };
 
 const isRelated = (product, query) => {
@@ -43,8 +47,8 @@ const displayProducts = query => {
 		for(let website of Object.keys(foundWebsites)) {
 			html += `<span class='filter'><input type='checkbox' id='${website}' checked='checked'><label for='${website}'>${website} (${foundWebsites[website]})</label></span>`;
 		}
-		html += `</div>`; // #platform-filter
 		html += `
+		</div>
 			<div id='price-filter'>
 				<span class='filter-title'>Price:</span>
 				<span class='filter'><label for='min-price'>Min Price: </label><input type='text' id='min-price' maxlength='8'></span>
@@ -65,7 +69,32 @@ const displayProducts = query => {
 					<label for='trackable-filter'>Price Trackable</label>
 				</span>
 			</div>
-		</div>`; // #filter
+		</div>`;
+
+	if(isStringISBN(query)) {
+		html += `
+			<div class='product'>
+				<div class='product-image'>
+					<a href='/audible' target='_blank' class='main-image center'>
+						<img src='/media/audible.png'>
+					</a>
+				</div>
+				<a href='/audible' target='_blank' class='product-title'>
+					Two FREE Audio Books
+				</a>
+				<div class='product-platform'>
+					on Audible
+				</div>
+				<div class='product-price'>
+					<div>$0.00</div>
+					<div>FREE</div>
+				</div>
+				<a href='/audible' target='_blank' class='product-link center'>
+					VIEW PRODUCT
+				</a>
+			</div>
+		`;
+	}
 	for(let product of foundProducts) {
 		html += product.html;
 	}
@@ -310,11 +339,10 @@ $(document).ready(() => {
 	});
 
 	$('#inner-content').on('click', '#attributes-filter input[id=shipping-filter]', event => {
-		// if(!primeOffered) {
-		// 	// TODO: Use a Cookie to check if we've offered them Prime
-		// 	$('#prime-offering').css('width', '300px');
-		// 	$('#prime-offering').css('border', '1px solid #333');
-		// }
+		if($.cookie('neverPayExtra-OfferedPrime') !== '1') {
+			$('#prime-offering').css('width', '300px');
+			$('#prime-offering').css('border', '1px solid #333');
+		}
 
     tryFilter('fast-shipping', String($(event.target).prop('checked')), 'not-fast-shipping');
 	});
@@ -370,9 +398,11 @@ const closePrimeOffering = id => {
 	setTimeout(() => $(`#${id}`).css('border', 'none'), 250);
 };
 
+const setCookie = () => $.cookie('neverPayExtra-OfferedPrime', '1', { expires : 30 });
+
 $('#prime-offering-yes').on('click', () => {
 	closePrimeOffering('prime-offering');
-	// TODO: Set a Cookie that says we've checked if they have prime
+	setCookie();
 });
 
 $('#prime-offering-no').on('click', () => {
@@ -381,6 +411,23 @@ $('#prime-offering-no').on('click', () => {
 	closePrimeOffering('prime-offering');
 });
 
-$('#prime-trial-offering-yes').on('click', () => closePrimeOffering('prime-trial-offering'));
+$('#prime-trial-offering-yes').on('click', () => {
+	$('#prime-trial-type-select').css('width', '300px');
+	$('#prime-trial-type-select').css('border', '1px solid #333');
+	closePrimeOffering('prime-trial-offering');
+});
 
-$('#prime-trial-offering-no').on('click', () => closePrimeOffering('prime-trial-offering'));
+$('#prime-trial-offering-no').on('click', () => {
+	closePrimeOffering('prime-trial-offering');
+	setCookie();
+});
+
+$('#prime-trial-type-select-yes').on('click', () => {
+	closePrimeOffering('prime-trial-type-select');
+	setCookie();
+});
+
+$('#prime-trial-type-select-no').on('click', () => {
+	closePrimeOffering('prime-trial-type-select');
+	setCookie();
+});

@@ -99,6 +99,12 @@ router.get('/chrome', (req, res) => res.redirect('https://chrome.google.com/webs
 
 router.get('/firefox', (req, res) => res.redirect('https://addons.mozilla.org/en-US/firefox/addon/never-pay-extra/'));
 
+router.get('/audible', (req, res) => res.redirect('https://amzn.to/2ygMSRl'));
+
+router.get('/prime', (req, res) => res.redirect('https://amzn.to/2M0bvnF'));
+
+router.get('/prime-student', (req, res) => res.redirect('https://amzn.to/2JNJNO7'));
+
 router.get('/robots.txt', (req, res) => {
 	res.type('text/plain');
 	res.send('User-agent: *\nDisallow:');
