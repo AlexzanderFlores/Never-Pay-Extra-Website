@@ -104,6 +104,8 @@ const displayProducts = query => {
 $(document).ready(() => {
 	const url = new URL(window.location.href);
 	let query = url.searchParams.get('q');
+	// const ref = url.searchParams.get('ref');
+	const cp = url.searchParams.get('cp');
 
 	if(query) {
 		$('#query').val(query);
@@ -197,6 +199,16 @@ $(document).ready(() => {
 						const price = (+product.price).toFixed(2).replace(noNums, ',');
 						const reviews = String(product.reviews).replace(noNums, ',');
 
+						let savingsString = '';
+						if(cp) {
+							const percentage = 100 - Math.ceil((+price * 100) / +cp);
+							if(percentage > 0) {
+								savingsString = `
+									<span class='savings-string'>${percentage}% Savings</span>
+								`;
+							}
+						}
+
 						let html = `
 							<div class='product' website='${product.platformDisplay}' price='${price}' fast-shipping='${product.fewDayShipping}' returns='${product.returnsAccepted}' trackable=${product.upc !== undefined}>
 								<div class='product-image center${multiImage}' original-image='${product.images[0]}'>
@@ -227,7 +239,7 @@ $(document).ready(() => {
 									on ${product.platformDisplay}
 								</div>
 								<div class='product-price'>
-									<div>$${price}</div>
+									<div>$${price}${savingsString}</div>
 									<div class='shipping-included'>(Shipping Included)</div>
 								</div>`;
 								if(product.rating && product.reviews) {

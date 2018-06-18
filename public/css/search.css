@@ -190,6 +190,11 @@
 	font-weight: bold;
 }
 
+.savings-string {
+  font-size: 14px;
+  color: #F9656A;
+}
+
 .shipping-included {
 	font-size: 10px;
 	font-style: italic;
